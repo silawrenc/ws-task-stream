@@ -1,0 +1,29 @@
+{
+  "name": "ws-batch",
+  "version": "0.0.1",
+  "description": "Batched tasks over websockets",
+  "scripts": {
+    "test": "tap test/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/silawrenc/ws-task-stream.git"
+  },
+  "keywords": [
+    "web socket",
+    "websocket",
+    "task",
+    "queue",
+    "socket.io"
+  ],
+  "author": "Simon Lawrence",
+  "license": "ISC",
+  "peerDependencies": {
+    "socket.io": "^1.7",
+    "socket.io-client": "^1.7"
+  },
+  "devDependencies": {
+    "sinon": "^1.17.7",
+    "tap": "^10.0.0"
+  }
+}
