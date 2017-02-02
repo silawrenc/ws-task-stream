@@ -1,7 +1,7 @@
 {
-  "name": "ws-batch",
+  "name": "ws-task-stream",
   "version": "0.0.1",
-  "description": "Batched tasks over websockets",
+  "description": "Use node streams with socket.io for task queues",
   "scripts": {
     "test": "tap test/*.test.js"
   },
