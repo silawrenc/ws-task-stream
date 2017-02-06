@@ -16,3 +16,13 @@ tap.test('Test client binding binds batch, item, complete handlers' , t => {
   t.true(socket.on.calledWith(msg.complete));
   t.end();
 });
+
+tap.test('Test client binding returns promise if no callback passed' , t => {
+  let socket = {
+    on: sinon.spy(),
+    once: sinon.spy(),
+  };
+  let p = bind(socket, sinon.stub());
+  t.type(p, 'Promise');
+  t.end();
+});
