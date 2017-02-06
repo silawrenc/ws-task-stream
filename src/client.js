@@ -6,8 +6,8 @@ module.exports = (handler, done) => {
   const clear = () => buffer.length = 0;
   const batchHandler = size => batch = size;
 
-  function resolve(handler, cb) {
-    let result = handler(buffer, cb);
+  function resolve(handler, acknowledge) {
+    let result = handler(buffer, acknowledge);
     if (typeof result.then ===  'function') {
       result.then(acknowledge).catch(acknowledge);
     }
