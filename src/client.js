@@ -6,6 +6,13 @@ module.exports = (handler, done) => {
   const clear = () => buffer.length = 0;
   const batchHandler = size => batch = size;
 
+  function resolve(handler, cb) {
+    let result = handler(buffer, cb);
+    if (typeof result.then ===  'function') {
+      result.then(acknowledge).catch(acknowledge);
+    }
+  }
+
   function complete(total, reply) {
     if (buffer.length !== (total % batch)) {
       clear();
@@ -24,7 +31,7 @@ module.exports = (handler, done) => {
   function acknowledge(reply, done) {
     return err => {
       clear();
-      if (err) {
+      if (err instanceof Error) {
         return reply(msg.error);
       }
       reply(msg.acknowledge);
