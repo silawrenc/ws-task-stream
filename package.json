@@ -1,6 +1,6 @@
 {
   "name": "ws-task-stream",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Use node streams with socket.io for task queues",
   "scripts": {
     "test": "tap test/*.test.js"
