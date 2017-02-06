@@ -46,7 +46,8 @@ module.exports = (socket, batchSize = 1, maxRetries = 3, opts = {}) => {
       retries.used = 0;
       fn ? fn(e) : stream.emit('error', e);
     }
-    batch.contents.forEach((v, i, a) => message(v, i === a.length-1, fn));
+    let noop = () => {};
+    batch.contents.forEach((v, i, a) => message(v, i === a.length-1, i === a.length-1 ? fn : noop));
   }
 
 
@@ -55,6 +56,5 @@ module.exports = (socket, batchSize = 1, maxRetries = 3, opts = {}) => {
   opts.write = write;
   let stream = new Writable(opts);
   stream.once('finish', () => socket.emit(msg.complete, written, acknowledge()));
-  // error.bind
   return stream;
 }

@@ -8,7 +8,7 @@ module.exports = (handler, done) => {
 
   function resolve(handler, buffer, acknowledge) {
     let result = handler(buffer, acknowledge);
-    if (typeof result.then ===  'function') {
+    if (result && (typeof result.then ===  'function')) {
       result.then(acknowledge).catch(acknowledge);
     }
   }

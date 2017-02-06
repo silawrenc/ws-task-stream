@@ -78,6 +78,31 @@ tap.test('Test stream retries up to max retries',  t => {
   t.end();
 });
 
+tap.test('Test stream retries up to max retries multi batch',  t => {
+  let batchSize = 4;
+  let maxRetries = 2;
+  let socket = {emit: sinon.spy()};
+  let s = stream(socket, batchSize, maxRetries);
+  let message = {foo: 'bar'};
+  s.write(message);
+  s.write(message);
+  s.write(message);
+  s.write(message);
+  t.equal(socket.emit.callCount, 5);
+
+  //invoke callback to reject previous message
+  respond(socket, msg.error);
+
+  //first retry
+  t.equal(socket.emit.callCount, 9);
+  respond(socket, msg.error);
+
+  //check for second retry
+  t.equal(socket.emit.callCount, 13);
+
+  t.end();
+});
+
 tap.test('Test stream emits error on exceeding max retries',  t => {
   let batchSize = 1;
   let maxRetries = 1;
