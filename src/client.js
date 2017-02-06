@@ -6,7 +6,7 @@ module.exports = (handler, done) => {
   const clear = () => buffer.length = 0;
   const batchHandler = size => batch = size;
 
-  function resolve(handler, acknowledge) {
+  function resolve(handler, buffer, acknowledge) {
     let result = handler(buffer, acknowledge);
     if (typeof result.then ===  'function') {
       result.then(acknowledge).catch(acknowledge);
@@ -18,13 +18,13 @@ module.exports = (handler, done) => {
       clear();
       return reply(msg.error);
     }
-    handler(buffer, acknowledge(reply, done));
+    resolve(handler, buffer, acknowledge(reply, done));
   }
 
   function item(data, reply) {
     buffer.push(data);
     if (buffer.length === batch) {
-      handler(buffer, acknowledge(reply));
+      resolve(handler, buffer, acknowledge(reply));
     }
   }
 
