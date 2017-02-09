@@ -13,7 +13,9 @@ const batch = 100;
 const retries = 3;
 
 io.on('connection', socket => {
-  myDataStream.pipe(stream(socket, batch, retries));
+  let resource = socket.request._query.resource;
+  fs.createReadStream(resource)
+    .pipe(stream(socket, batch, retries));
 });
 ```
 
@@ -33,7 +35,18 @@ client(io(url), handler, done);
 
 The stream provided by `stream` is a regular writable stream in object mode. Writes to it are cached and forwarded to the client, which must successfully acknowledge receipt of each batch before the next one can be sent. Batch size and no. of retries are both configurable and default to 1 (every write acknowledged) and 3 respectively.
 
-Acknowledgement is handled by calling the acknowledge argument to the client handler function, which has a standard node signature: pass no arguments to indicate success, an error for failure.
+Acknowledgement is handled by calling the acknowledge argument to the client handler function, which has a standard node signature: pass no arguments to indicate success, an error for failure. It's possible to eager acknowledge (for example to maintain a client-side queue to be processed).
+
+### Using promises with the client
+The client provides a standard node callback API, but is also promise aware: if your handler function returns a thenable (anything with a `then` method), you don't need to manually acknowledge batches - the resolved/rejected promise state will be used. Further, if you don't provide a `done` callback to the client constructor, a promise will be returned which resolves when all tasks have been handled. e.g.
+
+```js
+const io = require('socket.io-client');
+const client = require('ws-task-stream').client;
+// db.save returns a promise here
+client(io(url), db.save)
+  .then(db.close)
+  .then(() => alert('all done!'));
 
 ### Example
 To run the example:
