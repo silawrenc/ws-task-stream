@@ -56,7 +56,7 @@ npm install stream-array
 node server.js
 ```
 `example/src/client.js` contains the pre-browserified source for the client.
-
+```
 ### Install
 ```
 npm install ws-task-stream
